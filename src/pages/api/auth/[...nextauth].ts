@@ -42,7 +42,7 @@ export const authOptions: AuthOptions = {
             username: user.username,
           };
         } catch (error) {
-          throw new Error("Something went wrong");
+          throw new Error("Something went wrong" + error);
         }
       },
     }),
