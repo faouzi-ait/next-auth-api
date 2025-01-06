@@ -30,16 +30,14 @@ export function middleware(request: NextRequest) {
     request.cookies.get("next-auth.session-token")?.value ||
     request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-  const isPrivateRoute = pathname?.startsWith("/private");
-  const isAuthRoute = pathname?.startsWith("/auth");
+  const isPrivateRoute = pathname && pathname.startsWith("/private");
+  const isAuthRoute = pathname && pathname.startsWith("/auth");
 
   if (isPrivateRoute && !sessionToken) {
-    // Redirect unauthenticated users trying to access private pages
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   if (isAuthRoute && sessionToken) {
-    // Redirect authenticated users away from login/register pages
     return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next(); // Allow request to proceed
