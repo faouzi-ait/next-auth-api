@@ -1,7 +1,18 @@
+"use client";
+
 import Image from "next/image";
+import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+
 import styles from "./page.module.css";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: "/auth/login" });
+  };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -13,6 +24,7 @@ export default function Home() {
           height={38}
           priority
         />
+
         <ol>
           <li>
             Get started by editing <code>src/app/page.tsx</code>.
@@ -45,6 +57,14 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+
+        {session && <button onClick={handleLogout}>Log out</button>}
+
+        {!session && (
+          <div>
+            You are not logged in. <a href="/auth/login">Log in here</a>.
+          </div>
+        )}
       </main>
       <footer className={styles.footer}>
         <a
