@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import styles from "./page.module.css";
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/auth/login" });

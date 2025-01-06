@@ -3,6 +3,7 @@
 import { SessionProvider } from "next-auth/react";
 
 interface ClientSessionProviderProps {
+  // @typescript-eslint/no-explicit-any
   session: any;
   children: React.ReactNode;
 }
