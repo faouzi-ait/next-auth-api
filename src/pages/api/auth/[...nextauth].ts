@@ -1,13 +1,11 @@
-/* eslint-disable */
-
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth, { AuthOptions } from "next-auth";
 import bcrypt from "bcryptjs";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "../../../app/lib/db";
 import User from "../../../app/lib/models/users";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -53,17 +51,17 @@ export const authOptions = {
     strategy: "jwt", // Using JWT for session management
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  adapter: MongoDBAdapter(connect),  // MongoDB Adapter for session handling
+  adapter: MongoDBAdapter(connect), // MongoDB Adapter for session handling
 
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
       }
       return token;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }) {
       session.user = {
         id: token.id,
         email: token.email,
@@ -73,4 +71,5 @@ export const authOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+
 export default NextAuth(authOptions);
