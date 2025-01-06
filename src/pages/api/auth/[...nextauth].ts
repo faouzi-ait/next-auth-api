@@ -52,6 +52,7 @@ export const authOptions: AuthOptions = {
     strategy: "jwt", // Using JWT for session management
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   adapter: MongoDBAdapter(connect), // MongoDB Adapter for session handling
 
   callbacks: {
