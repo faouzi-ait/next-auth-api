@@ -44,12 +44,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/private/:path*",
-    "/auth/:path*",
-    "!/api/:path*",
-    "!/_next/static/:path*",
-    "!/_next/image/:path*",
-    "!/favicon.ico",
-  ],
+  matcher: ["/private/:path*", "/auth/:path*"],
 };
