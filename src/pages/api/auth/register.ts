@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import { connect } from "../../../app/lib/db";

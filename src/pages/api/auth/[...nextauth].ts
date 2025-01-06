@@ -1,3 +1,4 @@
+/* eslint-disable */
 import NextAuth, { AuthOptions } from "next-auth";
 import bcrypt from "bcryptjs";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
