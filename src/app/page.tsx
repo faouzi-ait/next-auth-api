@@ -9,6 +9,8 @@ import styles from "./page.module.css";
 export default function Home() {
   const { data: session } = useSession();
 
+  console.log(session);
+
   const handleLogout = () => {
     signOut({ callbackUrl: "/auth/login" });
   };

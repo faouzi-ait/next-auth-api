@@ -1,5 +1,5 @@
-/* eslint-disable */
 import NextAuth, { AuthOptions } from "next-auth";
+import clientPromise from "./clientDBConnection";
 import bcrypt from "bcryptjs";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -49,11 +49,10 @@ export const authOptions: AuthOptions = {
     }),
   ],
   session: {
-    strategy: "jwt", // Using JWT for session management
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  adapter: MongoDBAdapter(connect), // MongoDB Adapter for session handling
+  adapter: MongoDBAdapter(clientPromise),
 
   callbacks: {
     async jwt({ token, user }) {
@@ -65,7 +64,7 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       session.user = {
-        id: token.id,
+        name: token.id as string,
         email: token.email,
       };
       return session;
