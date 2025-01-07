@@ -38,7 +38,7 @@ export function middleware(request: NextRequest) {
       pathname.indexOf("/_next") === 0 ||
       pathname.indexOf("/api") === 0 ||
       pathname === "/_error" ||
-      pathname === "/_not-found" ||
+      pathname.indexOf("/_not-found") === 0 ||
       pathname === "/favicon.ico"
     ) {
       return NextResponse.next();
