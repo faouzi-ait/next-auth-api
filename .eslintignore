@@ -1,0 +1,2 @@
+# Ignore the 'pages/api/ignore-this-file.js' file
+/src/app/private/dashboard.page.tsx
