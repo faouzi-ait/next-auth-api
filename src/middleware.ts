@@ -26,7 +26,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Check if nextUrl and pathname are defined
   if (!request.nextUrl || typeof request.nextUrl.pathname !== "string") {
     console.warn("Skipping middleware due to missing nextUrl or pathname");
     return NextResponse.next();
@@ -36,11 +35,11 @@ export function middleware(request: NextRequest) {
 
   // Skip middleware for internal and special routes
   if (
-    pathname.startsWith("/_next") || // Static files and internal assets
-    pathname.startsWith("/api") ||   // API routes
-    pathname === "/_error" ||        // Error page
-    pathname === "/_not-found" ||    // Not-found page
-    pathname === "/favicon.ico"      // Favicon
+    pathname.indexOf("/_next") === 0 ||
+    pathname.indexOf("/api") === 0 ||
+    pathname === "/_error" ||
+    pathname === "/_not-found" ||
+    pathname === "/favicon.ico"
   ) {
     return NextResponse.next();
   }
@@ -49,16 +48,14 @@ export function middleware(request: NextRequest) {
     request.cookies.get("next-auth.session-token")?.value ||
     request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-  const isPrivateRoute = pathname.startsWith("/private");
-  const isAuthRoute = pathname.startsWith("/auth");
+  const isPrivateRoute = pathname.indexOf("/private") === 0;
+  const isAuthRoute = pathname.indexOf("/auth") === 0;
 
   if (isPrivateRoute && !sessionToken) {
-    // Redirect unauthenticated users trying to access private pages
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   if (isAuthRoute && sessionToken) {
-    // Redirect authenticated users away from login/register pages
     return NextResponse.redirect(new URL("/", request.url));
   }
 
