@@ -22,18 +22,18 @@
   - Middleware to stop login and register pages from being accessed by authenticated users
     and to redirect unauthenticated users trying to access private pages.
 */
+
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const pathname = request.nextUrl?.pathname || ""; // Ensure pathname is always a string
+
   const sessionToken =
     request.cookies.get("next-auth.session-token")?.value ||
     request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-  const isPrivateRoute =
-    typeof pathname === "string" && pathname.startsWith("/private");
-  const isAuthRoute =
-    typeof pathname === "string" && pathname.startsWith("/auth");
+  const isPrivateRoute = pathname.startsWith("/private");
+  const isAuthRoute = pathname.startsWith("/auth");
 
   if (isPrivateRoute && !sessionToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
@@ -42,16 +42,9 @@ export function middleware(request: NextRequest) {
   if (isAuthRoute && sessionToken) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-  return NextResponse.next(); // Allow request to proceed
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/private/:path*",
-    "/auth/:path*",
-    "/!/_next/static/:path*", // Exclude static files
-    "/!/_next/image/:path*", // Exclude image routes
-    "/!/favicon.ico",
-    "/!/api/:path*", // Exclude API routes
-  ],
+  matcher: ["/private/:path*", "/auth/:path*"],
 };
