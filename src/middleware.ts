@@ -30,8 +30,10 @@ export function middleware(request: NextRequest) {
     request.cookies.get("next-auth.session-token")?.value ||
     request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-  const isPrivateRoute = pathname.startsWith("/private") || "";
-  const isAuthRoute = pathname.startsWith("/auth") || "";
+  const isPrivateRoute =
+    typeof pathname === "string" && pathname.startsWith("/private");
+  const isAuthRoute =
+    typeof pathname === "string" && pathname.startsWith("/auth");
 
   if (isPrivateRoute && !sessionToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
@@ -44,5 +46,12 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/private/:path*", "/auth/:path*"],
+  matcher: [
+    "/private/:path*",
+    "/auth/:path*",
+    "/!/_next/static/:path*", // Exclude static files
+    "/!/_next/image/:path*", // Exclude image routes
+    "/!/favicon.ico",
+    "/!/api/:path*", // Exclude API routes
+  ],
 };
