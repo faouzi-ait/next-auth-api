@@ -22,7 +22,6 @@
   - Middleware to stop login and register pages from being accessed by authenticated users
     and to redirect unauthenticated users trying to access private pages.
 */
-
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
@@ -38,14 +37,9 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Check for internal routes and skip middleware for them
-    if (
-      pathname.startsWith("/_next") ||
-      pathname.startsWith("/api") ||
-      pathname === "/_error" ||
-      pathname === "/_not-found" ||
-      pathname === "/favicon.ico"
-    ) {
+    // Skip middleware for internal routes and special paths
+    const excludedPathsRegex = /\/(_next|api|_error|_not-found|favicon\.ico)/;
+    if (excludedPathsRegex.test(pathname)) {
       return NextResponse.next();
     }
 
@@ -54,17 +48,17 @@ export function middleware(request: NextRequest) {
       request.cookies.get("next-auth.session-token")?.value ||
       request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-    // Check if the route is private or auth-related
-    const isPrivateRoute = pathname.startsWith("/private");
-    const isAuthRoute = pathname.startsWith("/auth");
+    // Regular expressions to match private and auth routes
+    const privateRouteRegex = /^\/private\//;
+    const authRouteRegex = /^\/auth\//;
 
     // Redirect unauthenticated users to the login page for private routes
-    if (isPrivateRoute && !sessionToken) {
+    if (privateRouteRegex.test(pathname) && !sessionToken) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
     // Redirect authenticated users from auth routes
-    if (isAuthRoute && sessionToken) {
+    if (authRouteRegex.test(pathname) && sessionToken) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
