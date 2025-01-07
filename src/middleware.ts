@@ -26,8 +26,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Ensure nextUrl is defined and has a valid pathname
-  if (!request.nextUrl || !request.nextUrl.pathname) {
+  if (!request.nextUrl || typeof request.nextUrl.pathname !== "string") {
     console.warn("Skipping middleware due to missing nextUrl or pathname");
     return NextResponse.next();
   }
@@ -59,7 +58,6 @@ export function middleware(request: NextRequest) {
   }
   return NextResponse.next();
 }
-
 export const config = {
   matcher: ["/private/:path*", "/auth/:path*"],
 };
