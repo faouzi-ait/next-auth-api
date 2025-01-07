@@ -22,11 +22,20 @@
   - Middleware to stop login and register pages from being accessed by authenticated users
     and to redirect unauthenticated users trying to access private pages.
 */
-
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const pathname = request?.nextUrl?.pathname || "/"; // Ensure pathname is always a string
+  const pathname = request.nextUrl?.pathname || "";
+  
+  if ( // Skip middleware for internal Next.js routes and static files
+    pathname.startsWith("/_next") ||
+    pathname === "/_error" ||
+    pathname === "/_not-found" ||
+    pathname === "/favicon.ico" ||
+    pathname.startsWith("/api")
+  ) {
+    return NextResponse.next();
+  }
 
   const sessionToken =
     request.cookies.get("next-auth.session-token")?.value ||
@@ -38,13 +47,11 @@ export function middleware(request: NextRequest) {
   if (isPrivateRoute && !sessionToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-
   if (isAuthRoute && sessionToken) {
     return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next();
 }
-
 export const config = {
   matcher: ["/private/:path*", "/auth/:path*"],
 };
