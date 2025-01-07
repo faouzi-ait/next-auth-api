@@ -30,8 +30,8 @@ export function middleware(request: NextRequest) {
     request.cookies.get("next-auth.session-token")?.value ||
     request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-  const isPrivateRoute = pathname && pathname.startsWith("/private");
-  const isAuthRoute = pathname && pathname.startsWith("/auth");
+  const isPrivateRoute = pathname.startsWith("/private") || "";
+  const isAuthRoute = pathname.startsWith("/auth") || "";
 
   if (isPrivateRoute && !sessionToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
