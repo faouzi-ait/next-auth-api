@@ -26,6 +26,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
+  // Check if nextUrl and pathname are defined
   if (!request.nextUrl || typeof request.nextUrl.pathname !== "string") {
     console.warn("Skipping middleware due to missing nextUrl or pathname");
     return NextResponse.next();
@@ -33,12 +34,13 @@ export function middleware(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
+  // Skip middleware for internal and special routes
   if (
     pathname.startsWith("/_next") || // Static files and internal assets
-    pathname === "/_error" || // Error page
-    pathname === "/_not-found" || // Not-found page
-    pathname === "/favicon.ico" || // Favicon
-    pathname.startsWith("/api") // API routes
+    pathname.startsWith("/api") ||   // API routes
+    pathname === "/_error" ||        // Error page
+    pathname === "/_not-found" ||    // Not-found page
+    pathname === "/favicon.ico"      // Favicon
   ) {
     return NextResponse.next();
   }
@@ -51,13 +53,18 @@ export function middleware(request: NextRequest) {
   const isAuthRoute = pathname.startsWith("/auth");
 
   if (isPrivateRoute && !sessionToken) {
+    // Redirect unauthenticated users trying to access private pages
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
+
   if (isAuthRoute && sessionToken) {
+    // Redirect authenticated users away from login/register pages
     return NextResponse.redirect(new URL("/", request.url));
   }
+
   return NextResponse.next();
 }
+
 export const config = {
   matcher: ["/private/:path*", "/auth/:path*"],
 };
