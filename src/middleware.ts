@@ -27,22 +27,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   try {
-    // Ensure the pathname is a valid string
     const pathname = request.nextUrl.pathname;
 
-    // Log the pathname to confirm its value for debugging
+    // Log the pathname for debugging purposes
     console.log("Request Pathname:", pathname);
 
-    // If pathname is invalid or undefined, skip the middleware logic
+    // If pathname is invalid, skip the middleware
     if (!pathname || typeof pathname !== "string") {
       console.warn("Invalid pathname detected. Skipping middleware.");
       return NextResponse.next();
     }
 
-    // Skip middleware for internal and special routes
+    // Check for internal routes and skip middleware for them
     if (
-      pathname.indexOf("/_next") === 0 ||
-      pathname.indexOf("/api") === 0 ||
+      pathname.startsWith("/_next") ||
+      pathname.startsWith("/api") ||
       pathname === "/_error" ||
       pathname === "/_not-found" ||
       pathname === "/favicon.ico"
@@ -50,16 +49,16 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Check for session token
+    // Check for session token in cookies
     const sessionToken =
       request.cookies.get("next-auth.session-token")?.value ||
       request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-    // Determine if the route is private or auth-related
-    const isPrivateRoute = pathname.indexOf("/private") === 0;
-    const isAuthRoute = pathname.indexOf("/auth") === 0;
+    // Check if the route is private or auth-related
+    const isPrivateRoute = pathname.startsWith("/private");
+    const isAuthRoute = pathname.startsWith("/auth");
 
-    // Redirect unauthenticated users for private routes
+    // Redirect unauthenticated users to the login page for private routes
     if (isPrivateRoute && !sessionToken) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
@@ -72,12 +71,12 @@ export function middleware(request: NextRequest) {
     // Continue with the request if no issues
     return NextResponse.next();
   } catch (error) {
-    // Log any error that happens in the middleware
+    // Log any error and proceed with the request
     console.error("Middleware error:", error);
-    return NextResponse.next(); // Continue with the request, allowing it to fall through
+    return NextResponse.next();
   }
 }
 
 export const config = {
-  matcher: ["/private/:path*", "/auth/:path*"],
+  matcher: ["/private/:path*", "/auth/:path*", "/:path*"], // Ensure to capture all relevant paths
 };
