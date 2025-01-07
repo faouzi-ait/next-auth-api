@@ -25,7 +25,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl?.pathname || "";
+  const pathname = request?.nextUrl?.pathname || "";
   
   if ( // Skip middleware for internal Next.js routes and static files
     pathname.startsWith("/_next") ||
