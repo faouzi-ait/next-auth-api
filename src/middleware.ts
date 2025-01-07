@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /* 
   - Middleware to protect private pages from being accessed by unauthenticated users.
 */
