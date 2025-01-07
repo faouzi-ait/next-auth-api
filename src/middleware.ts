@@ -26,7 +26,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const pathname = request?.nextUrl?.pathname || ""; // Ensure pathname is always a string
+  const pathname = request?.nextUrl?.pathname || "/"; // Ensure pathname is always a string
 
   const sessionToken =
     request.cookies.get("next-auth.session-token")?.value ||
