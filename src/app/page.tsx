@@ -65,9 +65,14 @@ export default function Home() {
         {session && <button onClick={handleLogout}>Log out</button>}
 
         {!session && (
-          <div>
-            You are not logged in. <a href="/auth/login">Log in here</a>.
-          </div>
+          <>
+            <div>
+              You are not logged in. <a href="/auth/login">Log in here</a>.
+            </div>
+            <div>
+              Create your own login <a href="/auth/register">Register here</a>.
+            </div>
+          </>
         )}
       </main>
       <footer className={styles.footer}>
