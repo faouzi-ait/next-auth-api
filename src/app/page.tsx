@@ -1,9 +1,7 @@
-import Home from "./lib/pages/index/Home";
+import Home from "./lib/page/index/Home";
 
 const index = () => {
-  return (
-   <Home />
-  );
-}
+  return <Home />;
+};
 
 export default index;

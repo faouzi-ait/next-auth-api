@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import mongoose from "mongoose";
 
 interface MongooseCache {
@@ -8,7 +7,7 @@ interface MongooseCache {
 }
 
 interface ClientCache {
-  client: any | null; // Type of client can be modified based on the client you are using.
+  client: any | null;
   promise: Promise<any> | null;
 }
 
@@ -47,18 +46,16 @@ async function connect() {
   return cached.conn;
 }
 
-// Example of adding a clientPromise logic (it can be any other client e.g., Prisma, custom Mongo client)
 async function connectClient() {
   if (cachedClient.client) {
     return cachedClient.client;
   }
 
   if (!cachedClient.promise) {
-    // Simulate a client connection or use actual client connection logic here
     cachedClient.promise = new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ client: "client-connected" }); // Replace with actual client connection logic
-      }, 1000); // Example delay
+        resolve({ client: "client-connected" });
+      }, 1000);
     });
   }
 

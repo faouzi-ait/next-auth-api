@@ -1,9 +1,7 @@
-import Register from "../../lib/pages/register/Register";
+import Register from "../../lib/page/register/Register";
 
 const RegisterPage = () => {
-  return (
-    <Register />
-  );
-}
+  return <Register />;
+};
 
 export default RegisterPage;
