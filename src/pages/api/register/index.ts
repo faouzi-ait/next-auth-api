@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
-import { connect } from "../../../app/lib/db";
-import User from "../../../app/lib/models/users";
+import { connect } from "../../../lib/db";
+import User from "../../../lib/models/users";
 
 export default async function handler(
   req: NextApiRequest,

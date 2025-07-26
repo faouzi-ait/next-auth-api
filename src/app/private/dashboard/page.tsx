@@ -1,4 +1,4 @@
-import DashboardPage from "../../lib/page/dashboard/Dashboard";
+import DashboardPage from "../../../lib/page/dashboard/Dashboard";
 
 export default function Dashboard() {
   return <DashboardPage />;

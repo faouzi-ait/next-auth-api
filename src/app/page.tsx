@@ -1,4 +1,4 @@
-import Home from "./lib/page/index/Home";
+import Home from "@/lib/page/index/Home";
 
 const index = () => {
   return <Home />;
