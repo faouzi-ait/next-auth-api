@@ -1,12 +1,11 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
+import { Session } from "next-auth";
 
 interface ClientSessionProviderProps {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  session: any;
+  session: Session;
   children: React.ReactNode;
-  /* eslint-disable @typescript-eslint/no-explicit-any */
 }
 
 export default function ClientSessionProvider({

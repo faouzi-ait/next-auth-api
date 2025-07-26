@@ -63,7 +63,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   } catch (error) {
     console.error("Middleware error:", error);
-    return NextResponse.next(); // Fallback to allowing the request
+    return NextResponse.next();
   }
 }
 

@@ -1,8 +1,9 @@
 import NextAuth, { AuthOptions } from "next-auth";
-import clientPromise from "./clientDBConnection";
-import bcrypt from "bcryptjs";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+
+import clientPromise from "../../../app/lib/clientDBConnection";
 import { connect } from "../../../app/lib/db";
 import User from "../../../app/lib/models/users";
 
